@@ -1,0 +1,23 @@
+###create HTTP request
+###Read all users
+GET http://localhost:3000/users
+
+###Create a new user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "username": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123"
+  }
+
+###update a user
+PUT http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+  "username": "John Updated",
+  "email": "john.updated@example.com",
+  "password": "newpassword123"
+}
