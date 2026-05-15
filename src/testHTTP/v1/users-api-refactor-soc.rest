@@ -1,9 +1,9 @@
 ###create HTTP request
 ###Read all users
-GET http://localhost:3000/api/users
+GET http://localhost:3000/api/v1/users
 
 ###Create a new user
-POST http://localhost:3000/users
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
   }
 
 ###update a user
-PUT http://localhost:3000/users/1
+PUT http://localhost:3000/api/v1/users/1
 Content-Type: application/json
 
 {
@@ -21,3 +21,6 @@ Content-Type: application/json
   "email": "john.updated@example.com",
   "password": "newpassword123"
 }
+
+###delete a user
+DELETE http://localhost:3000/api/v1/users/1

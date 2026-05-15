@@ -2,15 +2,19 @@ import express from "express";
 import cors from "cors";
 
 import { users } from "./mockData/fakeUser.js";
-import { router as apiRoutes } from "./routes/v1/index.js";
+import { router as apiRoutes } from "./routes/index.js";
+import { connectDB } from "./config/mongodb.js";
 
 const app = express();
+
 //.use() --> สั่งให้ใช้ middleware สักตัว
 app.use(cors());
+
 //.JSON นี้เป็นของ express -->แปลง JSON เป็น JS -->เป็น middleware
 app.use(express.json());
 
-const port = 3000;
+app.use("/api", apiRoutes);
+
 app.get("/", (req, res) => {
   res.send(`<!doctype html>
   <html lang="en">
@@ -92,6 +96,10 @@ app.put("/users/:id", (req, res) => {
 });
 
 // app.delete();
+
+const port = 3000;
+
+await connectDB();
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
