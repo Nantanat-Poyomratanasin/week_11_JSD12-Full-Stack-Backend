@@ -4,6 +4,7 @@ import cors from "cors";
 import { users } from "./mockData/fakeUser.js";
 import { router as apiRoutes } from "./routes/index.js";
 import { connectDB } from "./config/mongodb.js";
+import { connectSupabase } from "./config/supabase.js";
 
 const app = express();
 
@@ -100,6 +101,9 @@ app.put("/users/:id", (req, res) => {
 const port = 3000;
 
 await connectDB();
+
+//Cloud service to deploy postgresql
+await connectSupabase();
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

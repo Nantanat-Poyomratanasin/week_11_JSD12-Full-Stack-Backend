@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { User } from "../../modules/users/user.model.js";
+import { supabase } from "../../config/supabase.js";
 
 export const router = Router();
 
+//MongoDB routes (/api/v2/users)
 const userResponse = (doc) => {
   const user = doc.toObject();
   //only delete in Server not DB
@@ -37,44 +39,47 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
-  const user = users.find((u) => u.id === req.params.id);
+router.put("/:id", async (req, res) => {});
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
+router.delete("/:id", async (req, res) => {});
+
+//Supabase/PostgreSQL routes (/api/v2/users/pg)
+//Password is excluded from SELECT
+const PG_SELECT = "id, username, email, role, created_at, updated_at";
+
+router.get("/pg", async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error });
   }
-
-  const { username, email, password } = req.body;
-
-  if (!username || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username, email, and password are required" });
-  }
-
-  user.username = username;
-  user.email = email;
-  user.password = password;
-  res.status(200).json(user);
 });
 
-router.delete("/:id", async (req, res) => {
-  const user = users.find((u) => u.id === req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  const { username, email, password } = req.body;
+router.post("/pg", async (req, res) => {
+  const { username, email, password, role } = req.body || {};
 
   if (!username || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username, email, and password are required" });
+    return res.status(400).json({
+      success: false,
+      error: "username, email, and password are required",
+    });
   }
 
-  user.username = username;
-  user.email = email;
-  user.password = password;
-  res.status(200).json(user);
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .insert({ username, email, password, role: role || "user" })
+      .select(PG_SELECT)
+      .single();
+
+    if (error) throw error;
+    return res.status(201).json({ success: true, data });
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err.message });
+  }
 });
+
+router.put("/pg/:id", async (req, res) => {});
+
+router.delete("/pg/:id", async (req, res) => {});
