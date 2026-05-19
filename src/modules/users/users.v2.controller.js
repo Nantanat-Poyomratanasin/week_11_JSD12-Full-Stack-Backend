@@ -1,4 +1,4 @@
-import { user } from "./user.model.js";
+import { User } from "./user.model.js";
 
 const userResponse = (doc) => {
   const user = doc.toObject();
@@ -66,4 +66,14 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {};
+export const deleteUser = async (req, res) => {
+  try {
+    const doc = await User.findByIdAndDelete(req.params.id);
+    if (!doc) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    return res.status(200).json({ success: true, data: doc });
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err });
+  }
+};
