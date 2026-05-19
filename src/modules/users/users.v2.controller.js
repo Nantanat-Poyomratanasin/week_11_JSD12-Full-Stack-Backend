@@ -24,7 +24,8 @@ export const createUser = async (req, res, next) => {
     const err = new Error("Username, email, and password are required");
     err.name = "ValidationError";
     err.status = 400;
-    return res.status(400).json({ success: false, error: err });
+    // return res.status(400).json({ success: false, error: err });
+    next(err);
   }
 
   try {
