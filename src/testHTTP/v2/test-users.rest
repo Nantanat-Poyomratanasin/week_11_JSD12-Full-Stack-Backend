@@ -2,6 +2,16 @@
 ###Read all users
 GET http://localhost:3000/api/v2/users
 
+###Login users
+POST http://localhost:3000/api/v2/users
+Content-Type: application/json
+{
+  "email":"emily@example.com",
+"password":"pass4455"
+} 
+
+
+
 ###Create a new user
 POST http://localhost:3000/api/v2/users
 Content-Type: application/json

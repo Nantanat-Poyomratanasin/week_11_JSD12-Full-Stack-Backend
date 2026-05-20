@@ -1,4 +1,5 @@
 import { User } from "./user.model.js";
+import bcrypt from "bcrypt";
 
 const userResponse = (doc) => {
   const user = doc.toObject();
@@ -37,7 +38,7 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   const { username, email, password, role } = req.body || {};
   const updates = {};
 
@@ -71,7 +72,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const doc = await User.findByIdAndDelete(req.params.id);
     if (!doc) {
@@ -83,3 +84,61 @@ export const deleteUser = async (req, res) => {
     next(err);
   }
 };
+
+//bcrypt login
+export const usersLogin = async (req, res, next) => {
+  const { email, username, password } = req.body || {};
+
+  try {
+    const user = await User.findOne({ email }).select("+password");
+
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (isMatched) {
+      res
+        .status(200)
+        .json({ success: true, message: "Identity verification successful" });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: err,
+        message: "email or password is not correct",
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+//bcrypt register
+export const createUserHash = async (req, res, next) => {
+  const { password, email, username, role } = req.body || {};
+
+  if (!email || !password) {
+    console.error(`email andd password required : ${err}`);
+    next(err);
+  }
+};
+
+async function hashedPassword(password) {
+  const hash = await bcrypt.hash(password, 12);
+  return hash;
+}
+
+try {
+  const user = await User.findOne({ email });
+  if (user) {
+    return res
+      .status(400)
+      .json({ message: "email alard use.", success: false });
+  }
+  const newPassword = await bcrypt.hash(password, 14);
+  const doc = await User.create({
+    email,
+    username,
+    password: newPassword,
+    role,
+  });
+  res.status(201).json({ success: true, data: doc });
+} catch (err) {
+  next(err);
+}
