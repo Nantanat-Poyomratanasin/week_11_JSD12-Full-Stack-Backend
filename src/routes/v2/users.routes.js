@@ -177,7 +177,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-//Check user session/token
+//Check user session/token (middlewareคั่น)
 router.get("/auth/me", authUser, async (req, res, next) => {
   try {
     const userId = req.user.user._id;
