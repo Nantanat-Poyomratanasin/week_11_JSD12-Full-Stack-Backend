@@ -5,8 +5,9 @@ GET http://localhost:3000/api/v2/users
 ###Login users
 POST http://localhost:3000/api/v2/users
 Content-Type: application/json
+
 {
-  "email":"emily@example.com",
+  "email":"tily@example.com",
 "password":"pass4455"
 } 
 
@@ -19,7 +20,7 @@ Content-Type: application/json
 {
   "username": "John Doe",
   "role":"admin",
-  "email": "john.doe3@example.com",
+  "email": "johnje@example.com",
   "password": "password123"
   }
 
