@@ -6,7 +6,7 @@
 @baseUrl = http://localhost:3000/api/v2/users
 
 # ——— UPDATE THESE to match a real user in your MongoDB ———————————————
-@validEmail     = charlie7@example.com
+@validEmail     = charlie8@example.com
 @validPassword  = password123
 
 # Test cases 

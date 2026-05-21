@@ -11,9 +11,9 @@ export const authUser = async (req, res, next) => {
     });
   }
   try {
-    const decodedToken = jwt.verify(token, procecss.env.JWT_SECRET); ///Decoded token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); ///Decoded token
 
-    req.user = { usesrs: { _id: decodedToken.userId } };
+    req.user = { users: { _id: decodedToken.userId } };
     next();
   } catch (error) {
     next(error);

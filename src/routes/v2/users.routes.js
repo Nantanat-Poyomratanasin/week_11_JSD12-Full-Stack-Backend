@@ -123,7 +123,7 @@ router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
 
   //checkว่าข้อมูลที่ได้รับมาถูกต้องมั้ย
-  if (!emaill || !password) {
+  if (!email || !password) {
     //ส่งข้อมูลกลับไป
     return res
       .status(400)
@@ -180,7 +180,7 @@ router.post("/login", async (req, res, next) => {
 //Check user session/token (middlewareคั่น)
 router.get("/auth/me", authUser, async (req, res, next) => {
   try {
-    const userId = req.user.user._id;
+    const userId = req.user.users._id;
     const user = await User.findById(userId);
 
     if (!user) {
