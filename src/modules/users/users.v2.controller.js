@@ -85,7 +85,7 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-//bcrypt login
+// //bcrypt login
 export const usersLogin = async (req, res, next) => {
   const { email, username, password } = req.body || {};
 
@@ -109,36 +109,38 @@ export const usersLogin = async (req, res, next) => {
   }
 };
 
-//bcrypt register
+// //bcrypt register
 export const createUserHash = async (req, res, next) => {
   const { password, email, username, role } = req.body || {};
 
   if (!email || !password) {
-    console.error(`email andd password required : ${err}`);
+    return res.status(400).json({
+      success: false,
+      message: "email and password required",
+    });
+  }
+
+  // async function hashedPassword(password) {
+  //   const hash = await bcrypt.hash(password, 12);
+  //   return hash;
+  // }
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res
+        .status(400)
+        .json({ message: "email alard use.", success: false });
+    }
+    const newPassword = await bcrypt.hash(password, 14);
+    const doc = await User.create({
+      email,
+      username,
+      password: newPassword,
+      role,
+    });
+    res.status(201).json({ success: true, data: doc });
+  } catch (err) {
     next(err);
   }
 };
-
-async function hashedPassword(password) {
-  const hash = await bcrypt.hash(password, 12);
-  return hash;
-}
-
-try {
-  const user = await User.findOne({ email });
-  if (user) {
-    return res
-      .status(400)
-      .json({ message: "email alard use.", success: false });
-  }
-  const newPassword = await bcrypt.hash(password, 14);
-  const doc = await User.create({
-    email,
-    username,
-    password: newPassword,
-    role,
-  });
-  res.status(201).json({ success: true, data: doc });
-} catch (err) {
-  next(err);
-}

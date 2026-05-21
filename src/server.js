@@ -5,6 +5,7 @@ import { users } from "./mockData/fakeUser.js";
 import { router as apiRoutes } from "./routes/index.js";
 import { connectDB } from "./config/mongodb.js";
 import { connectSupabase } from "./config/supabase.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors());
 
 //.JSON นี้เป็นของ express -->แปลง JSON เป็น JS -->เป็น middleware
 app.use(express.json());
-
+app.use(cookieParser());
 app.use("/api", apiRoutes);
 
 app.get("/", (req, res) => {
