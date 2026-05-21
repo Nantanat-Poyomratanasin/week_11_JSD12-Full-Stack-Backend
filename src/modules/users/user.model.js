@@ -27,7 +27,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+//Hash password before saving in DB (best practice)
+//.pre ก่อน query DB ให้ hash ก่อน
 userSchema.pre("save", async function () {
+  //ดักว่าถ้าไม่เปลี่ยน pw ก็ไม่ต้อง hash
   if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 14);
