@@ -1,4 +1,4 @@
-const rateLimit = require("express-rate-limiter"); //middlewareที่จำกัด req number เวลามีคนยิงreqมาเยอะๆ
+import rateLimit from "express-rate-limit"; //middlewareที่จำกัด req number เวลามีคนยิงreqมาเยอะๆ
 
 export const Limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // ในเเวลา 15 mins
