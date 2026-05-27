@@ -116,17 +116,6 @@ app.put("/users/:id", (req, res) => {
 
 // app.delete();
 
-const port = 3000;
-
-await connectDB();
-
-//Cloud service to deploy postgresql
-await connectSupabase();
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -138,4 +127,15 @@ app.use((err, req, res, next) => {
     timestamp: new Date().toISOString(),
     stack: err.stack,
   });
+});
+
+const port = 3000;
+
+await connectDB();
+
+//Cloud service to deploy postgresql
+await connectSupabase();
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
