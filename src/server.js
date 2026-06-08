@@ -130,13 +130,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 await connectDB();
-
-//Cloud service to deploy postgresql
 await connectSupabase();
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
